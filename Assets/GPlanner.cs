@@ -14,7 +14,7 @@ public class Node
     {
         this.parent = parent;
         this.cost = cost;
-        this.state = Dictionary<string, int>(allstates);
+        this.state = new Dictionary<string, int>(allstates);
         this.action = action;
     }
 }
@@ -30,11 +30,16 @@ public class GPlanner : MonoBehaviour
         }
 
         List<Node> leaves = new List<Node>();
-        Node start = new Node(null, 0, GWorld.Instance.GetWorld().GetStates(), null);
+        Node start = new Node(
+    null,
+    0,
+    GWorld.Instance.GetWorld().GetStates(),
+    null
+);
 
-        bool sucess = BuildGraph(start, leaves, usableActions, goal);
+        bool success = BuildGraph(start, leaves, usableActions, goal);
 
-        if (!sucess)
+        if (!success)
         {
             Debug.Log("NO PLAN");
             return null;
@@ -69,7 +74,7 @@ public class GPlanner : MonoBehaviour
             queue.Enqueue(a);
         }
 
-        Dubug.Log("The Plan is: ");
+        Debug.Log("The Plan is: ");
         foreach(GAction a in queue)
         {
             Debug.Log("Q: " + a.actionName);
@@ -78,15 +83,19 @@ public class GPlanner : MonoBehaviour
         return queue;
     }
 
-    private bool BuidGraph(Node parent, List<Node> leaves, List<GAction> usuableActions, Dictionary<string, int> goal)
+    private bool BuildGraph(
+    Node parent,
+    List<Node> leaves,
+    List<GAction> usableActions,
+    Dictionary<string, int> goal)
     {
         bool foundPath = false;
-        foreach(GAction action in usuableActions)
+        foreach(GAction action in usableActions)
         {
             if(action.IsAchievableGiven(parent.state))
             {
                 Dictionary<string, int> currentState = new Dictionary<string, int>(parent.state);
-                foreach(KeyValuePair<string, int>eff in action.effects)
+                foreach(KeyValuePair<string, int> eff in action.effects)
                 {
                     if(!currentState.ContainsKey(eff.Key))
                         currentState.Add(eff.Key, eff.Value);
@@ -102,7 +111,7 @@ public class GPlanner : MonoBehaviour
                 }
                 else
                 {
-                    List<GAction> subset = ActionSubset(usuableActions, action);
+                    List<GAction> subset = ActionSubset(usableActions, action);
                     bool found = BuildGraph(node, leaves, subset, goal);
                     if(found)
                         foundPath = true;

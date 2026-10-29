@@ -2,24 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class GWorld 
+public class GWorld : MonoBehaviour
 {
-    private static readonly GWorld instance = new GWorld();
-    private static WorldStates world;
+    public static GWorld Instance;
 
-    static GWorld()
+    private WorldStates world;
+
+    private void Awake()
     {
+        Instance = this;
         world = new WorldStates();
-    }
-
-    private GWorld()
-    {
-        
-    }
-
-    public static GWorld Instance
-    {
-        get{return instance; }
     }
 
     public WorldStates GetWorld()

@@ -15,9 +15,10 @@ public class SubGoal
         remove = r;
     }
 }
+
 public class GAgent : MonoBehaviour
 {
-    public List<GAction> actions =new List<GAction>();
+    public List<GAction> actions = new List<GAction>();
     public Dictionary<SubGoal, int> goals = new Dictionary<SubGoal, int>();
 
     GPlanner planner;
@@ -46,25 +47,23 @@ public class GAgent : MonoBehaviour
     {
         if(currentAction != null && currentAction.running)
         {
-            if(currentAction.agent.hasPath && currentAction.agent.remainingDistance < 1f)
+            float distanceToTarget = Vector3.Distance(currentAction.target.transform.position, this.transform.position);
+            if(currentAction.agent.hasPath && distanceToTarget < 2f) //currentAction.agent.remainingDistance < 0.5f)
             {
+                Debug.Log("Distance to Goal: " + currentAction.agent.remainingDistance);
                 if(!invoked)
                 {
                     Invoke("CompleteAction", currentAction.duration);
                     invoked = true;
                 }
             }
+            return;
         }
 
        if (planner == null || actionQueue == null)
         {
-            planner = GetComponent<GPlanner>();
-
-        if (planner == null)
-{
-    planner = gameObject.AddComponent<GPlanner>();
-}
-
+            planner = new GPlanner();
+            
             var sortedGoals = from entry in goals orderby entry.Value descending select entry;
 
             foreach(KeyValuePair<SubGoal, int> sg in sortedGoals)
@@ -95,7 +94,7 @@ public class GAgent : MonoBehaviour
                 if(currentAction.target == null && currentAction.targetTag != "")
                    currentAction.target = GameObject.FindWithTag(currentAction.targetTag);
 
-                if(currentAction.target != null)
+                if(currentAction.targetTag != null)
                 {
                     currentAction.running = true;
                     currentAction.agent.SetDestination(currentAction.target.transform.position);

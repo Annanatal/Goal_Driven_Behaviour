@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class Patient : GAgent
 {
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected virtual void Start()
+    // Removi a linha "public new List<GAction> actions..." daqui, 
+    // pois a classe base (GAgent) já deve possuí-la.
+
+    void Start()
     {
-       base.Start() ;
+       base.Start();
        SubGoal s1 = new SubGoal("isWaiting", 1, true);
        goals.Add(s1, 3);
     }
-
-    
-
 }

@@ -45,21 +45,25 @@ public abstract class GAction : MonoBehaviour
         return true;
     }
 
-    public bool IsAchievableGiven(
-    Dictionary<string, int> conditions)
-{
-    foreach (KeyValuePair<string, int> p in preconditions)
+    public bool IsAchievableGiven(Dictionary<string, int> conditions)
     {
-        if (!conditions.ContainsKey(p.Key) ||
-            conditions[p.Key] != p.Value)
+        // Proteção: se o preconditions for null, evita o erro e retorna true
+        if (preconditions == null)
         {
-            return false;
+            return true;
         }
+
+        foreach (KeyValuePair<string, int> p in preconditions)
+        {
+            if (!conditions.ContainsKey(p.Key) ||
+                conditions[p.Key] != p.Value)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
-
-    return true;
-}
-
     public abstract bool PrePerform();
     public abstract bool PostPerform();
 }

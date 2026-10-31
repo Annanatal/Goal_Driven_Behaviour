@@ -18,7 +18,7 @@ public class Node
         this.action = action;
     }
 }
-public class GPlanner : MonoBehaviour
+public class GPlanner 
 {
     public Queue<GAction> plan(List<GAction> actions, Dictionary<string, int> goal, WorldStates states)
     {
@@ -30,12 +30,7 @@ public class GPlanner : MonoBehaviour
         }
 
         List<Node> leaves = new List<Node>();
-        Node start = new Node(
-    null,
-    0,
-    GWorld.Instance.GetWorld().GetStates(),
-    null
-);
+        Node start = new Node( null, 0,  GWorld.Instance.GetWorld().GetStates(), null);
 
         bool success = BuildGraph(start, leaves, usableActions, goal);
 

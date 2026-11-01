@@ -21,6 +21,7 @@ public class Node
 public class GPlanner 
 {
     public Queue<GAction> plan(List<GAction> actions, Dictionary<string, int> goal, WorldStates states)
+    
     {
         List<GAction> usableActions = new List<GAction>();
         foreach (GAction a in actions)
@@ -78,43 +79,102 @@ public class GPlanner
         return queue;
     }
 
-    private bool BuildGraph(
+  
+private bool BuildGraph(
     Node parent,
     List<Node> leaves,
     List<GAction> usableActions,
     Dictionary<string, int> goal)
+{
+    if (parent == null)
     {
-        bool foundPath = false;
-        foreach(GAction action in usableActions)
+        Debug.LogError("BuildGraph: parent está NULL!");
+        return false;
+    }
+
+    if (parent.state == null)
+    {
+        Debug.LogError("BuildGraph: parent.state está NULL!");
+        return false;
+    }
+
+    if (leaves == null || usableActions == null || goal == null)
+    {
+        Debug.LogError("BuildGraph: leaves, usableActions ou goal está NULL!");
+        return false;
+    }
+
+    bool foundPath = false;
+
+    foreach (GAction action in usableActions)
+    {
+        if (action == null)
         {
-            if(action.IsAchievableGiven(parent.state))
+            Debug.LogError("BuildGraph: existe uma ação NULL na lista!");
+            continue;
+        }
+
+        if (action.effects == null)
+        {
+            Debug.LogError(
+                "BuildGraph: effects está NULL na ação " + action.name
+            );
+            continue;
+        }
+
+        if (action.preconditions == null)
+        {
+            Debug.LogError(
+                "BuildGraph: preconditions está NULL na ação " + action.name
+            );
+            continue;
+        }
+
+        if (action.IsAchievableGiven(parent.state))
+        {
+            Dictionary<string, int> currentState =
+                new Dictionary<string, int>(parent.state);
+
+            foreach (KeyValuePair<string, int> eff in action.effects)
             {
-                Dictionary<string, int> currentState = new Dictionary<string, int>(parent.state);
-                foreach(KeyValuePair<string, int> eff in action.effects)
-                {
-                    if(!currentState.ContainsKey(eff.Key))
-                        currentState.Add(eff.Key, eff.Value);
-                    
-                }
+                currentState[eff.Key] = eff.Value;
+            }
 
-                Node node = new Node(parent, parent.cost + action.cost, currentState, action);
+            Node node = new Node(
+                parent,
+                parent.cost + action.cost,
+                currentState,
+                action
+            );
 
-                if(GoalAchieved(goal, currentState))
-                {
-                    leaves.Add(node);
+            if (GoalAchieved(goal, currentState))
+            {
+                leaves.Add(node);
+                foundPath = true;
+            }
+            else
+            {
+                List<GAction> subset = ActionSubset(
+                    usableActions,
+                    action
+                );
+
+                bool found = BuildGraph(
+                    node,
+                    leaves,
+                    subset,
+                    goal
+                );
+
+                if (found)
                     foundPath = true;
-                }
-                else
-                {
-                    List<GAction> subset = ActionSubset(usableActions, action);
-                    bool found = BuildGraph(node, leaves, subset, goal);
-                    if(found)
-                        foundPath = true;
-                }
             }
         }
-        return foundPath;
     }
+
+    return foundPath;
+}
+
     private bool GoalAchieved(Dictionary<string, int> goal, Dictionary<string, int> state)
     {
         foreach(KeyValuePair<string, int> g in goal)

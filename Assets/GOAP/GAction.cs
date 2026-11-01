@@ -22,23 +22,33 @@ public abstract class GAction : MonoBehaviour
     public bool running = false;
 
     
-
+    
     public void Awake()
     {
-        agent = this.gameObject.GetComponent<NavMeshAgent>();
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
-        if(preconditions != null)
-           foreach (WorldState w in preConditions)
-            {
-                preconditions.Add(w.key, w.value);
-            }
+        preconditions = new Dictionary<string, int>();
+        effects = new Dictionary<string, int>();
 
-        if(afterEffects != null)
-           foreach (WorldState w in afterEffects)
+        if (preConditions != null)
+        {
+            foreach (WorldState w in preConditions)
             {
-                effects.Add(w.key, w.value);
+                if (w != null)
+                    preconditions[w.key] = w.value;
             }
+        }
+
+        if (afterEffects != null)
+        {
+            foreach (WorldState w in afterEffects)
+            {
+                if (w != null)
+                    effects[w.key] = w.value;
+            }
+        }
     }
+
 
     public bool IsAchievable()
     {

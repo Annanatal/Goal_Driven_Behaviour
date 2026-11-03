@@ -3,16 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GWorld : MonoBehaviour
+public sealed class GWorld 
 {
-    public static GWorld Instance;
+    public static readonly GWorld instannce = new GWorld();
+    private static WorldStates world;
+    private static Queue<GameObject> patients;
 
-    private WorldStates world;
-
-    private void Awake()
+    static GWorld()
     {
-        Instance = this;
-        world = new WorldStates();
+        world = new WorldStates(); 
+    }
+
+    private GWorld()
+    {
+        
+    }
+
+    public void AddPatient(GameObject p)
+    {
+        patients.Enqueue(p);
+    }
+
+    public GameObject RemovePatient()
+    {
+        if (patients.Count == 0) return null;
+        return patients.Dequeue();
+    }
+    public static GWorld Instance
+    {
+        get { return Instance; }
     }
 
     public WorldStates GetWorld()

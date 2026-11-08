@@ -3019,6 +3019,8 @@ GameObject:
   - component: {fileID: 6112914300972965700}
   - component: {fileID: 562169261264721017}
   - component: {fileID: 1044924517419803620}
+  - component: {fileID: 5733977569739937493}
+  - component: {fileID: 8994500831583616458}
   m_Layer: 0
   m_Name: Patient
   m_TagString: Untagged
@@ -3120,7 +3122,7 @@ MonoBehaviour:
   cost: 1
   target: {fileID: 0}
   targetTag: Reception
-  duration: 5
+  duration: 2
   preConditions:
   - key: hasArrived
     value: 0
@@ -3151,6 +3153,48 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5733977569739937493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881807149238628900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfa6c2aed7f5e47bd18207d912bd03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GAgentVisual
+  thisAgent: {fileID: 1265928396850683443}
+  agentName: 
+  currentAction: 
+  actionsList: 
+  goalsList: 
+--- !u!114 &8994500831583616458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881807149238628900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 534b2334c9954724cbb1ce72ee344b18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GetTreated
+  actionName: GetTreated
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions:
+  - key: atHospital
+    value: 0
+  afterEffects:
+  - key: isTreated
+    value: 0
+  agent: {fileID: 0}
+  running: 0
 --- !u!1 &7927236269272520591
 GameObject:
   m_ObjectHideFlags: 0

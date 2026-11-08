@@ -23,6 +23,8 @@ public sealed class GWorld
         
         if(cubes.Length > 0 )
             world.ModifyState("FreeCubicle", cubes.Length);
+
+        Time.timeScale = 5;
     }
 
     // Propriedade pública para aceder à instância (corrigido o loop infinito)

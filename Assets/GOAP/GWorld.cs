@@ -5,18 +5,30 @@ using UnityEngine;
 
 public sealed class GWorld 
 {
-    public static readonly GWorld instannce = new GWorld();
-    private static WorldStates world;
-    private static Queue<GameObject> patients;
-
-    static GWorld()
-    {
-        world = new WorldStates(); 
-    }
-
+    private static readonly GWorld instance = new GWorld();
+    private WorldStates world;
+    private Queue<GameObject> patients;
+    private Queue<GameObject> cubicles;
+    
+    // Construtor privado para o Singleton
     private GWorld()
     {
+        world = new WorldStates(); 
+        patients = new Queue<GameObject>();
+        cubicles = new Queue<GameObject>();
         
+        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cubicle");
+        foreach (GameObject c in cubes)
+            cubicles.Enqueue(c);
+        
+        if(cubes.Length > 0 )
+            world.ModifyState("FreeCubicle", cubes.Length);
+    }
+
+    // Propriedade pública para aceder à instância (corrigido o loop infinito)
+    public static GWorld Instance
+    {
+        get { return instance; }
     }
 
     public void AddPatient(GameObject p)
@@ -29,9 +41,16 @@ public sealed class GWorld
         if (patients.Count == 0) return null;
         return patients.Dequeue();
     }
-    public static GWorld Instance
+    
+    public void AddCubicle(GameObject p)
     {
-        get { return Instance; }
+        cubicles.Enqueue(p);
+    }
+
+    public GameObject RemoveCubicle()
+    {
+        if (cubicles.Count == 0) return null;
+        return cubicles.Dequeue();
     }
 
     public WorldStates GetWorld()

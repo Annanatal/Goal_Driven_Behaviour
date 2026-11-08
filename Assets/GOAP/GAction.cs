@@ -19,6 +19,10 @@ public abstract class GAction : MonoBehaviour
 
     public WorldStates agentBeLiefs;
 
+    public GInventory inventory;
+    
+    
+    
     public bool running = false;
 
     
@@ -47,6 +51,8 @@ public abstract class GAction : MonoBehaviour
                     effects[w.key] = w.value;
             }
         }
+        
+        inventory = this.GetComponent<GAgent>().inventory;
     }
 
 

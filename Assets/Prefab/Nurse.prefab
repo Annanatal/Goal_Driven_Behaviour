@@ -1130,6 +1130,8 @@ GameObject:
   - component: {fileID: 5212441109116235598}
   - component: {fileID: 2985133835950569674}
   - component: {fileID: 1190569733006255068}
+  - component: {fileID: 6494867846017170584}
+  - component: {fileID: 5482533349989661246}
   m_Layer: 0
   m_Name: Nurse
   m_TagString: Untagged
@@ -1208,13 +1210,63 @@ MonoBehaviour:
   duration: 0
   preConditions:
   - key: Waiting
-    value: 0
+    value: 1
   - key: FreeCubicle
+    value: 1
+  afterEffects:
+  - key: treatPatient
+    value: 1
+  agent: {fileID: 5212441109116235598}
+  running: 0
+--- !u!114 &6494867846017170584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618188073631541129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac47e885d8886a648bba72763e606f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToCubicle
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions:
+  - key: patientPickepup
     value: 0
   afterEffects:
   - key: treatPatient
     value: 0
   agent: {fileID: 0}
+  running: 0
+--- !u!114 &5482533349989661246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618188073631541129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac47e885d8886a648bba72763e606f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToCubicle
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions:
+  - key: patientPickepup
+    value: 1
+  afterEffects:
+  - key: treatPatient
+    value: 1
+  agent: {fileID: 5212441109116235598}
   running: 0
 --- !u!1 &2629889911763255196
 GameObject:
